@@ -23,6 +23,9 @@ on:
         default: 'firmware'
         required: false
         type: string
+    secrets:
+      password:
+        required: true
 
 jobs:
   matrix:
@@ -69,6 +72,15 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+
+      # Repeat this part, if you have more than one secret to replace!
+      - name: Replace Macro with Action Secret
+        uses: thiagodnf/string-replacer@v1.0.2
+        with:
+          find: "<&kp KP_N2 &kp KP_NUMBER_3 &kp KP_NUMBER_3 &kp KP_NUMBER_3>;"
+          replace: "${{ secrets.password }}"
+          include: |
+            config/corneish_zen.keymap
 
       - name: Cache west modules
         uses: actions/cache@v3.0.11
